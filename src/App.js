@@ -13,9 +13,9 @@ import ComingSoon from "./components/ComingSoon";
 import ScrollToSection from "./components/ScrollToSection";
 import { availableTimes as initialAvailableTimes } from "./components/ReservationsAvailable";
 
-const initializeTimes = (initialAvailableTimes) => initialAvailableTimes;
+export const initializeTimes = (initialAvailableTimes) => initialAvailableTimes;
 
-const timesReducer = (state, action) => {
+export const timesReducer = (state, action) => {
   switch (action.type) {
     case "SET_DATE":
       return state;
@@ -70,12 +70,7 @@ function App() {
               />
             }
           />
-          <Route
-            path="/comingsoon"
-            element={
-              <ComingSoon/>
-            }
-          />
+          <Route path="/comingsoon" element={<ComingSoon />} />
         </Routes>
         <Footer />
       </div>
