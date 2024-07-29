@@ -1,0 +1,130 @@
+.booking-confirmation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 45px;
+}
+
+.hero-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  font-family: "Markazi Text", sans-serif;
+  background-color: #495e57;
+}
+
+.reservation-summary {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  text-align: center;
+}
+
+.reservation-summary h3 {
+  font-size: 40px;
+  color: #f5f5f5;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.reservation-info {
+  border: 2px solid #f3ce13d8;
+  width: fit-content;
+  color: #000000;
+  background-color: #f5f5f5;
+  padding: 5px 10px;
+  align-self: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.further-instruction {
+  font-family: "Karla", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #f5f5f5;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.final-reservation-form {
+  margin-top: 30px;
+}
+
+.final-reservation-form h3 {
+  font-size: 40px;
+  font-family: "Markazi Text", sans-serif;
+  text-align: center;
+  margin-bottom: 30px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #f3ce13d8;
+  text-shadow: 1px 1px 1px #495e57;
+}
+
+.customer-details {
+  border: 1px solid black;
+  padding: 45px;
+  background-color: #495e57;
+}
+
+.customer-details h3 {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+  font-family: "Karla", sans-serif;
+  color: #f3ce13d8;
+  text-shadow: 1px 1px 1px #000000;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 45px;
+}
+
+.cancel-button,
+.submit-button {
+  font-size: 16px;
+  font-family: "Karla", sans-serif;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  width: 125px;
+  padding: 4px 12px;
+}
+
+.cancel-button {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.submit-button {
+  background-color: #f3ce13d8;
+  color: rgb(0, 0, 0);
+}
+
+.cancel-button:hover,
+.submit-button:hover {
+  opacity: 0.8;
+}

@@ -1,0 +1,90 @@
+/* CSS Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.container {
+  border: 1px solid black;
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 0 20px;
+    flex-direction: column;
+  }
+
+  .navlinks-container ul {
+    flex-direction: column;
+  }
+
+  .hero-container {
+    margin: 0 20px;
+    padding: 50px 0;
+  }
+}
+
+.App {
+  background-color: #f5f5f5;
+}
+
+body {
+  font-family: "Karla", "Markazi Text", sans-serif;
+}
+
+.nav-container {
+  display: flex;
+  margin-left: 290px;
+  margin-right: 290px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 290px 1fr 290px;
+  grid-template-rows: auto auto auto auto;
+  grid-template-areas:
+    ". Hero ."
+    ". Highlights ."
+    ". Testimonials ."
+    ". About .";
+}
+
+.testimonials {
+  grid-area: Testimonials;
+}
+
+.about {
+  grid-area: About;
+}
+
+.footer {
+  grid-area: Footer;
+}
+
+.hero,
+.testimonials,
+.footer {
+  margin: 0;
+}
+
+.unused-left,
+.unused-right {
+  width: 290px;
+}
+
+.unused-left.green,
+.unused-right.green {
+  background-color: #495e57;
+}
+
+.unused-left.white,
+.unused-right.white {
+  background-color: #f5f5f5;
+}
+
+.footer {
+  display: flex;
+  margin-left: 290px;
+  margin-right: 290px;
+}

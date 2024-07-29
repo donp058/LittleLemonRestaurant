@@ -1,0 +1,67 @@
+.hero-container {
+  background-color: #495e57;
+  grid-area: Hero;
+  display: flex;
+  height: 365px;
+  position: relative;
+}
+
+.flex-item-1 {
+  width: 350px;
+  margin-right: 135px;
+}
+.flex-item-2 {
+  position: absolute;
+  right: 0px;
+  bottom: -80px;
+}
+
+.restaurant-food-photo {
+  width: 400px;
+  height: 400px;
+  margin-top: 25px;
+  margin-bottom: 13px;
+  border-radius: 16px;
+}
+
+.flex-item-1 h1 {
+  margin-top: 29px;
+  margin-bottom: 0;
+  font-size: 64px;
+  font-family: "Markazi Text", sans-serif;
+  color: #f3ce13d8;
+  letter-spacing: 0.5px;
+}
+
+.flex-item-1 h3 {
+  margin-top: -15px;
+  font-family: "Markazi Text", sans-serif;
+  font-size: 40px;
+  color: #f5f5f5;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.flex-item-1 p {
+  margin-top: 19px;
+  color: #f5f5f5;
+}
+
+.reservation-button {
+  margin-top: 70px;
+  height: 50px;
+  width: 200px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  font-family: "karla", sans-serif;
+  background-color: #f4ce14;
+  border-color: #f4ce14;
+  letter-spacing: 0.5px;
+}
+
+.reservation-button:hover {
+  background-color: rgb(97, 4, 97);
+  border-color: rgb(122, 3, 122);
+  color: whitesmoke;
+}

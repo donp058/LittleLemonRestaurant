@@ -1,0 +1,32 @@
+.testimonials {
+  background-color: #495e57;
+  color: whitesmoke;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  font-size: 24px;
+  font-family: "Karla", sans-serif;
+  font-weight: bolder;
+  padding-top: 75px;
+  overflow: hidden; /* Prevents content from overflowing */
+}
+
+.review-title {
+  display: flex;
+  justify-content: center;
+  color: #f3ce13d8;
+  margin-bottom: 100px;
+  letter-spacing: 0.5px;
+  font-size: 24px;
+  font-family: "Karla", sans-serif;
+  font-weight: 900;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000;
+}
+
+.review-section {
+  padding-top: 20px;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden; /* Prevents content from overflowing */
+}

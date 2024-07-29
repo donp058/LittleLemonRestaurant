@@ -1,0 +1,35 @@
+.reviews-horizontal-scroll {
+  display: flex;
+  overflow-x: auto;
+  list-style: none;
+  scrollbar-width: none; /* For Firefox */
+  -ms-overflow-style: none; /* For Internet Explorer and Edge */
+  -webkit-overflow-scrolling: touch;
+}
+
+.reviews-horizontal-scroll::-webkit-scrollbar {
+  display: none; /* For Chrome, Safari, and Opera */
+}
+
+.reviews-horizontal-scroll ul {
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+.reviews-horizontal-scroll ul li {
+  display: inline-block;
+  margin-right: 20px; /* Add spacing between list items */
+  flex: 0 0 auto;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}

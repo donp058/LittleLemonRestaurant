@@ -1,0 +1,42 @@
+.navlinks-container {
+  display: flex;
+  flex-grow: 1;
+}
+
+.navlinks-container ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  justify-content: space-between; /* This ensures the links are spaced out within the container */
+  align-items: center;
+}
+
+.navlinks-container ul li {
+  margin: 0;
+}
+
+.navlinks-container ul li a {
+  font-size: 20px;
+  text-decoration: none;
+  color: black;
+  font-family: "Karla", sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.nav-logo {
+  width: 200px;
+  margin-right: 65px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.navlinks-container ul li .react-scroll-link {
+  cursor: pointer;
+}
+
+.navlinks-container ul li a {
+  cursor: pointer;
+}
