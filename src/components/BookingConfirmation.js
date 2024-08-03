@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../CSS-Styles/BookingConfirmation.css";
 import { useNavigate } from "react-router-dom";
 
+/* global submitAPI */ // Declare submitAPI as a global variable
+
 export default function BookingConfirmation({
   reservationDetails,
   setReservationDetails,
@@ -31,16 +33,25 @@ export default function BookingConfirmation({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle the final submission and booking confirmation
-    // This could include updating the reservation status and any other necessary actions
-    console.log("Reservation Confirmed", {
+    const formData = {
+      ...reservationDetails,
       firstName,
       lastName,
       email,
       phone,
-      ...reservationDetails,
-    });
-    navigate("/confirmation");
+    };
+
+    // Submit form data to API
+    if (window.submitAPI(formData)) {
+      // Reset reservation state
+      resetReservationState();
+      // Navigate to confirmation page
+      navigate("/confirmed-booking");
+    } else {
+      alert(
+        "There was an error submitting your reservation. Please try again."
+      );
+    }
   };
 
   const resetReservationState = () => {
@@ -49,6 +60,7 @@ export default function BookingConfirmation({
       time: "",
       diners: 0,
       specialRequests: "",
+      occasion: "",
     });
     setFirstName("");
     setLastName("");

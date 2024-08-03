@@ -1,5 +1,7 @@
+/* global fetchAPI, submitAPI */ // Declare API functions as global
+
 import "./CSS-Styles/App.css";
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Nav from "./components/Nav";
 import Footer from "./components/Footer";
@@ -9,28 +11,23 @@ import Testimonials from "./components/Testimonials";
 import About from "./components/About";
 import Reservations from "./components/Reservations";
 import BookingConfirmation from "./components/BookingConfirmation";
-import ComingSoon from "./components/ComingSoon";
+import ConfirmedBooking from "./components/ConfirmedBooking";
 import ScrollToSection from "./components/ScrollToSection";
-import { availableTimes as initialAvailableTimes } from "./components/ReservationsAvailable";
+import ComingSoon from "./components/ComingSoon";
 
-export const initializeTimes = (initialAvailableTimes) => initialAvailableTimes;
+// Initialize available times with today's date
+export const initializeTimes = () => {
+  const today = new Date();
+  return fetchAPI(today);
+};
 
+// Reducer function to update available times based on selected date
 export const timesReducer = (state, action) => {
   switch (action.type) {
     case "SET_DATE":
-      return state;
-    case "UPDATE_TIMES":
-      // Logic to update available times based on selected date
-      return state;
-    case "UPDATE_SLOT":
-      // Logic to update a specific slot
-      const { date, time, update } = action.payload;
-      return {
-        ...state,
-        [date]: state[date].map((slot) =>
-          slot.time === time ? { ...slot, ...update } : slot
-        ),
-      };
+      const selectedDate = action.payload;
+      const availableTimes = fetchAPI(selectedDate);
+      return availableTimes;
     default:
       return state;
   }
@@ -39,10 +36,16 @@ export const timesReducer = (state, action) => {
 function App() {
   const [availableTimes, dispatch] = useReducer(
     timesReducer,
-    initialAvailableTimes,
+    [],
     initializeTimes
   );
   const [reservationDetails, setReservationDetails] = useState({});
+
+  useEffect(() => {
+    const today = new Date();
+    const testTimes = fetchAPI(today);
+    console.log("Testing API fetch for today's date:", testTimes);
+  }, []);
 
   return (
     <Router>
@@ -70,6 +73,7 @@ function App() {
               />
             }
           />
+          <Route path="/confirmed-booking" element={<ConfirmedBooking />} />
           <Route path="/comingsoon" element={<ComingSoon />} />
         </Routes>
         <Footer />

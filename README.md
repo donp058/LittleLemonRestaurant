@@ -1,5 +1,11 @@
 # Getting Started with Create React App
 
+**Little Lemon Restaurant App**
+
+This project is a web application that I designed for the Meta Front-End Devloper Certification through Coursera. Its function is for managing table reservations at the Little Lemon Restaurant. It allows customers to book tables online by selecting available times and dates, ensuring a smooth and convenient booking experience. The application is built using React, with dynamic time slots fetched from an API (that I linked to, but did not build) to prevent double bookings (it basically is a randomizer for available times. this will be changed in the future to pull saved reservations and promote availability based on that data, while adding to the stored data when a new booking is made). My contributions include integrating the API, developing the UI/UX, and ensuring responsive design across devices. Figma files were created by myself to plan out the design and interactivity, where this is the final product of those efforts.
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

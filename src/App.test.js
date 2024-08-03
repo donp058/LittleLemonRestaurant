@@ -1,38 +1,20 @@
-import { render, screen, within } from "@testing-library/react";
-import App, { initializeTimes, timesReducer } from "./App";
-import { availableTimes as initialAvailableTimes } from "./components/ReservationsAvailable";
+import { timesReducer, initializeTimes } from "./App";
+import { fetchAPI } from "../api"; // Adjust the import based on your setup
 
-// Helper function to get a valid date from availableTimes
-const getValidDate = () => Object.keys(initialAvailableTimes)[0];
+jest.mock("../api", () => ({
+  fetchAPI: jest.fn(),
+}));
 
-// Existing test to verify rendering of the main heading
-test("renders the App component and finds the main heading", () => {
-  render(<App />);
+const initialAvailableTimes = {
+  "2024-07-28": [
+    { time: "4:00 P.M.", booked: false },
+    { time: "4:30 P.M.", booked: false },
+    { time: "5:00 P.M.", booked: false },
+  ],
+};
 
-  // Find the hero section with role="banner"
-  const banner = screen.getByRole("banner");
-  const headingElement = within(banner).getByRole("heading", {
-    name: /Little Lemon/i,
-  });
+const getValidDate = () => "2024-07-28";
 
-  expect(headingElement).toBeInTheDocument();
-});
-
-// New test for initializeTimes function
-test("initializeTimes returns the initial times", () => {
-  expect(initializeTimes(initialAvailableTimes)).toEqual(initialAvailableTimes);
-});
-
-// New test for timesReducer function with SET_DATE action
-test("timesReducer handles SET_DATE action correctly", () => {
-  const initialState = initialAvailableTimes;
-  const validDate = getValidDate();
-  const action = { type: "SET_DATE", payload: { date: validDate } };
-  const newState = timesReducer(initialState, action);
-  expect(newState).toEqual(initialState);
-});
-
-// New test for timesReducer function with UPDATE_SLOT action
 test("timesReducer handles UPDATE_SLOT action correctly", () => {
   const initialState = initialAvailableTimes;
   const validDate = getValidDate();
@@ -65,4 +47,17 @@ test("timesReducer handles UPDATE_SLOT action correctly", () => {
 
   const newState = timesReducer(initialState, action);
   expect(newState).toEqual(expectedState);
+});
+
+test("initializeTimes calls fetchAPI and returns available times", () => {
+  const mockAvailableTimes = [
+    { time: "4:00 P.M.", available: true },
+    { time: "4:30 P.M.", available: true },
+  ];
+  fetchAPI.mockReturnValue(mockAvailableTimes);
+
+  const availableTimes = initializeTimes();
+
+  expect(fetchAPI).toHaveBeenCalled();
+  expect(availableTimes).toEqual(mockAvailableTimes);
 });

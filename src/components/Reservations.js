@@ -18,7 +18,7 @@ export default function Reservations({
           <h3>Reservations</h3>
           <img
             src="restaurant.jpg"
-            alt="Picture of restaurant tables"
+            alt="Tables set up in the restaurant"
             className="restaurant-tables-photo"
           />
         </div>

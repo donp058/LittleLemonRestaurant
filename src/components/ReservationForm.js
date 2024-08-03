@@ -5,18 +5,18 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../CSS-Styles/ReservationForm.css";
 
 const defaultTimes = [
-  { time: "4:00 P.M.", booked: true },
-  { time: "4:30 P.M.", booked: true },
-  { time: "5:00 P.M.", booked: true },
-  { time: "5:30 P.M.", booked: true },
-  { time: "6:00 P.M.", booked: true },
-  { time: "6:30 P.M.", booked: true },
-  { time: "7:00 P.M.", booked: true },
-  { time: "7:30 P.M.", booked: true },
-  { time: "8:00 P.M.", booked: true },
-  { time: "8:30 P.M.", booked: true },
-  { time: "9:00 P.M.", booked: true },
-  { time: "9:30 P.M.", booked: true },
+  { time: "4:00 P.M.", available: false },
+  { time: "4:30 P.M.", available: false },
+  { time: "5:00 P.M.", available: false },
+  { time: "5:30 P.M.", available: false },
+  { time: "6:00 P.M.", available: false },
+  { time: "6:30 P.M.", available: false },
+  { time: "7:00 P.M.", available: false },
+  { time: "7:30 P.M.", available: false },
+  { time: "8:00 P.M.", available: false },
+  { time: "8:30 P.M.", available: false },
+  { time: "9:00 P.M.", available: false },
+  { time: "9:30 P.M.", available: false },
 ];
 
 export default function ReservationForm({
@@ -42,7 +42,6 @@ export default function ReservationForm({
   const handleDateChange = (date) => {
     setSelectedDate(date);
     setIsDateSelected(true);
-    // Dispatch action to update available times based on selected date
     dispatch({ type: "SET_DATE", payload: date });
     setSelectedTime(""); // Reset selected time when date changes
   };
@@ -69,7 +68,7 @@ export default function ReservationForm({
   const handleSubmit = (e) => {
     e.preventDefault();
     const formattedDate = selectedDate?.toISOString().split("T")[0];
-    // Set reservation details to be passed to the confirmation page
+
     let updatedSpecialRequests = specialRequests;
     if (
       !isDateSelected ||
@@ -99,10 +98,7 @@ export default function ReservationForm({
     }
   };
 
-  const timesToDisplay =
-    selectedDate && availableTimes[selectedDate?.toISOString().split("T")[0]]
-      ? availableTimes[selectedDate?.toISOString().split("T")[0]]
-      : defaultTimes;
+  const timesToDisplay = selectedDate ? availableTimes : defaultTimes;
 
   return (
     <form className="reservation-form" onSubmit={handleSubmit}>
@@ -124,11 +120,6 @@ export default function ReservationForm({
             aria-describedby="date-error"
             aria-label="Reservation Date"
           />
-          {errors.date && (
-            <span id="date-error" className="error-text">
-              Please select a date.
-            </span>
-          )}
         </div>
         <div className={`table-chart ${errors.time ? "error-border" : ""}`}>
           <h3>AVAILABLE SEATING TIMES</h3>
@@ -143,7 +134,7 @@ export default function ReservationForm({
                 htmlFor={timeSlot.time}
                 className={`time-slot ${
                   selectedTime === timeSlot.time ? "selected" : ""
-                } ${timeSlot.booked ? "booked" : ""}`}
+                } ${!timeSlot.available ? "booked" : ""}`}
               >
                 <input
                   type="radio"
@@ -152,9 +143,9 @@ export default function ReservationForm({
                   value={timeSlot.time}
                   checked={selectedTime === timeSlot.time}
                   onChange={handleTimeChange}
-                  disabled={timeSlot.booked}
+                  disabled={!timeSlot.available}
                   aria-checked={selectedTime === timeSlot.time}
-                  aria-disabled={timeSlot.booked}
+                  aria-disabled={!timeSlot.available}
                 />
                 {timeSlot.time}
               </label>
@@ -186,7 +177,7 @@ export default function ReservationForm({
             </select>
             {errors.diners && (
               <span id="diners-error" className="error-text">
-                Please select the number of diners.
+                Select.
               </span>
             )}
           </div>
@@ -213,7 +204,7 @@ export default function ReservationForm({
             </select>
             {errors.occasion && (
               <span id="occasion-error" className="error-text">
-                Please select an occasion.
+                Select.
               </span>
             )}
           </div>

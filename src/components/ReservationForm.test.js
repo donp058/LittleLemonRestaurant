@@ -2,6 +2,11 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import ReservationForm from "./ReservationForm";
 import { BrowserRouter as Router } from "react-router-dom";
 import { act } from "react";
+import { fetchAPI } from "../api"; // Import the fetchAPI mock
+
+jest.mock("../api", () => ({
+  fetchAPI: jest.fn(),
+}));
 
 beforeAll(() => {
   // Mock the window.alert method
@@ -11,7 +16,11 @@ beforeAll(() => {
 test("renders the ReservationForm heading", () => {
   render(
     <Router>
-      <ReservationForm />
+      <ReservationForm
+        availableTimes={{}}
+        dispatch={jest.fn()}
+        setReservationDetails={jest.fn()}
+      />
     </Router>
   );
   const headingElement = screen.getByText(/available seating times/i);
@@ -19,9 +28,19 @@ test("renders the ReservationForm heading", () => {
 });
 
 test("submits the ReservationForm", async () => {
+  fetchAPI.mockReturnValue([
+    { time: "4:00 P.M.", available: true },
+    { time: "4:30 P.M.", available: true },
+    { time: "5:00 P.M.", available: true },
+  ]);
+
   render(
     <Router>
-      <ReservationForm />
+      <ReservationForm
+        availableTimes={{}}
+        dispatch={jest.fn()}
+        setReservationDetails={jest.fn()}
+      />
     </Router>
   );
 
