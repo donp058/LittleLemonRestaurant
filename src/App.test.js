@@ -1,63 +1,76 @@
-import { timesReducer, initializeTimes } from "./App";
-import { fetchAPI } from "../api"; // Adjust the import based on your setup
+// Mock the global fetchAPI function
+global.fetchAPI = jest.fn(() => [
+  { time: "4:00 P.M.", available: true },
+  { time: "5:00 P.M.", available: true },
+  { time: "6:00 P.M.", available: true },
+]);
 
-jest.mock("../api", () => ({
-  fetchAPI: jest.fn(),
-}));
+import { initializeTimes, timesReducer } from "./App";
 
-const initialAvailableTimes = {
-  "2024-07-28": [
-    { time: "4:00 P.M.", booked: false },
-    { time: "4:30 P.M.", booked: false },
-    { time: "5:00 P.M.", booked: false },
-  ],
-};
+describe("App Component Tests", () => {
+  test("initializeTimes calls fetchAPI and returns available times", () => {
+    const times = initializeTimes();
+    console.log("Times returned from initializeTimes:", times); // Debugging line
+    expect(fetchAPI).toHaveBeenCalledTimes(1);
+    expect(times).toEqual([
+      { time: "4:00 P.M.", available: true },
+      { time: "5:00 P.M.", available: true },
+      { time: "6:00 P.M.", available: true },
+    ]);
+  });
 
-const getValidDate = () => "2024-07-28";
-
-test("timesReducer handles UPDATE_SLOT action correctly", () => {
-  const initialState = initialAvailableTimes;
-  const validDate = getValidDate();
-  const action = {
-    type: "UPDATE_SLOT",
-    payload: {
-      date: validDate,
-      time: "4:00 P.M.",
-      update: {
-        booked: true,
-        reservationFName: "John",
-        reservationLName: "Doe",
+  test("timesReducer handles UPDATE_SLOT action correctly", () => {
+    const initialState = {
+      "2024-07-28": fetchAPI(new Date("2024-07-28")),
+    };
+    const validDate = "2024-07-28";
+    const action = {
+      type: "UPDATE_SLOT",
+      payload: {
+        date: validDate,
+        time: "4:00 P.M.",
+        update: {
+          booked: true,
+          reservationFName: "John",
+          reservationLName: "Doe",
+        },
       },
-    },
-  };
+    };
 
-  const expectedState = {
-    ...initialState,
-    [validDate]: initialState[validDate].map((slot) =>
-      slot.time === "4:00 P.M."
-        ? {
-            ...slot,
-            booked: true,
-            reservationFName: "John",
-            reservationLName: "Doe",
-          }
-        : slot
-    ),
-  };
+    const expectedState = {
+      [validDate]: [
+        {
+          time: "4:00 P.M.",
+          available: true,
+          booked: true,
+          reservationFName: "John",
+          reservationLName: "Doe",
+        },
+        { time: "5:00 P.M.", available: true },
+        { time: "6:00 P.M.", available: true },
+      ],
+    };
 
-  const newState = timesReducer(initialState, action);
-  expect(newState).toEqual(expectedState);
-});
+    const newState = timesReducer(initialState, action);
+    console.log("New state returned from timesReducer:", newState); // Debugging line
+    expect(newState).toEqual(expectedState);
+  });
 
-test("initializeTimes calls fetchAPI and returns available times", () => {
-  const mockAvailableTimes = [
-    { time: "4:00 P.M.", available: true },
-    { time: "4:30 P.M.", available: true },
-  ];
-  fetchAPI.mockReturnValue(mockAvailableTimes);
+  test("timesReducer handles SET_DATE action correctly", () => {
+    const initialState = {};
+    const validDate = "2024-07-28";
+    const action = { type: "SET_DATE", payload: validDate };
 
-  const availableTimes = initializeTimes();
+    const expectedState = {
+      [validDate]: [
+        { time: "4:00 P.M.", available: true },
+        { time: "5:00 P.M.", available: true },
+        { time: "6:00 P.M.", available: true },
+      ],
+    };
 
-  expect(fetchAPI).toHaveBeenCalled();
-  expect(availableTimes).toEqual(mockAvailableTimes);
+    const newState = timesReducer(initialState, action);
+    console.log("New state after SET_DATE:", newState); // Debugging line
+    expect(newState).toEqual(expectedState);
+  });
 });

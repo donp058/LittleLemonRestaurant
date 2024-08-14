@@ -29,6 +29,9 @@ const fetchAPI = function (date) {
   // Load existing bookings from local storage
   const existingBookings = JSON.parse(localStorage.getItem("bookings")) || [];
 
+  // Check if the date is today
+  const isToday = date.toDateString() === new Date().toDateString();
+
   // Check which slots are available based on existing bookings
   timeSlots.forEach((slot) => {
     const isBooked = existingBookings.some(
@@ -37,13 +40,18 @@ const fetchAPI = function (date) {
         booking.time === slot
     );
 
-    // Randomly mark slots as available or not
+    // For today's date, ensure some availability or apply different logic
+    const available = isToday
+      ? random() > 0.2 // Make it easier to get available times today
+      : random() > 0.5; // Randomize availability for other days
+
     result.push({
       time: slot,
-      available: !isBooked && random() > 0.5, // Randomize availability
+      available: !isBooked && available,
     });
   });
 
+  console.log("API Result for Date", date, result);
   return result;
 };
 

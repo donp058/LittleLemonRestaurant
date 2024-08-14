@@ -28,7 +28,7 @@ export default function ReservationForm({
   const [selectedTime, setSelectedTime] = useState("");
   const [specialRequests, setSpecialRequests] = useState("");
   const [selectedOccasion, setSelectedOccasion] = useState("");
-  const [selectedDiners, setSelectedDiners] = useState(1);
+  const [selectedDiners, setSelectedDiners] = useState(0);
 
   const [isDateSelected, setIsDateSelected] = useState(false);
   const [isDinersSelected, setIsDinersSelected] = useState(false);
@@ -40,9 +40,10 @@ export default function ReservationForm({
   const navigate = useNavigate();
 
   const handleDateChange = (date) => {
+    const formattedDate = date.toISOString().split("T")[0]; // Ensure the format is compatible with fetchAPI
     setSelectedDate(date);
     setIsDateSelected(true);
-    dispatch({ type: "SET_DATE", payload: date });
+    dispatch({ type: "SET_DATE", payload: formattedDate });
     setSelectedTime(""); // Reset selected time when date changes
   };
 
@@ -67,7 +68,7 @@ export default function ReservationForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formattedDate = selectedDate?.toISOString().split("T")[0];
+    const formattedDate = selectedDate?.toLocaleDateString(); // Adjust to local date string
 
     let updatedSpecialRequests = specialRequests;
     if (
@@ -88,7 +89,7 @@ export default function ReservationForm({
         updatedSpecialRequests = "None";
       }
       setReservationDetails({
-        date: formattedDate,
+        date: formattedDate, // Use the formatted date string for reservation
         time: selectedTime,
         diners: selectedDiners,
         specialRequests: updatedSpecialRequests,
@@ -98,10 +99,24 @@ export default function ReservationForm({
     }
   };
 
-  const timesToDisplay = selectedDate ? availableTimes : defaultTimes;
+  const timesToDisplay = selectedDate
+    ? availableTimes[selectedDate.toISOString().split("T")[0]] || defaultTimes
+    : defaultTimes;
+
+  // Debugging logs
+  console.log("Selected Date:", selectedDate);
+  console.log(
+    "Available Times for Date:",
+    availableTimes[selectedDate?.toISOString().split("T")[0]]
+  );
+  console.log("Times to Display:", timesToDisplay);
 
   return (
-    <form className="reservation-form" onSubmit={handleSubmit}>
+    <form
+      className="reservation-form"
+      data-testid="reservation-form"
+      onSubmit={handleSubmit}
+    >
       <div className="reservation-col1"></div>
       <div className="reservation-data">
         <div className="date-section">
@@ -171,6 +186,7 @@ export default function ReservationForm({
               aria-describedby="diners-error"
               aria-label="Number of Patrons"
             >
+              <option value="0">0</option>
               <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>

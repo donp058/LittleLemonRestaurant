@@ -18,16 +18,29 @@ import ComingSoon from "./components/ComingSoon";
 // Initialize available times with today's date
 export const initializeTimes = () => {
   const today = new Date();
-  return fetchAPI(today);
+  const times = fetchAPI(today); // Use fetchAPI directly
+  console.log("Fetched times: ", times); // Debugging line
+  return { [today.toISOString().split("T")[0]]: times };
 };
 
 // Reducer function to update available times based on selected date
-export const timesReducer = (state, action) => {
+export const timesReducer = (state = {}, action) => {
   switch (action.type) {
+    case "UPDATE_SLOT":
+      const { date, time, update } = action.payload;
+      return {
+        ...state,
+        [date]: state[date]?.map((slot) =>
+          slot.time === time ? { ...slot, ...update } : slot
+        ),
+      };
     case "SET_DATE":
-      const selectedDate = action.payload;
-      const availableTimes = fetchAPI(selectedDate);
-      return availableTimes;
+      const selectedDate = new Date(action.payload).toISOString().split("T")[0];
+      const availableTimes = fetchAPI(new Date(selectedDate)); // Use fetchAPI directly
+      return {
+        ...state,
+        [selectedDate]: availableTimes,
+      };
     default:
       return state;
   }
@@ -36,14 +49,14 @@ export const timesReducer = (state, action) => {
 function App() {
   const [availableTimes, dispatch] = useReducer(
     timesReducer,
-    [],
+    {},
     initializeTimes
   );
   const [reservationDetails, setReservationDetails] = useState({});
 
   useEffect(() => {
     const today = new Date();
-    const testTimes = fetchAPI(today);
+    const testTimes = fetchAPI(today); // Use fetchAPI directly
     console.log("Testing API fetch for today's date:", testTimes);
   }, []);
 
