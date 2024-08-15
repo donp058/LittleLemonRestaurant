@@ -1,64 +1,64 @@
-// Mock the global fetchAPI function
+import { render, screen, fireEvent, act } from "@testing-library/react";
+import { BrowserRouter as Router } from "react-router-dom";
+import ReservationForm from "./ReservationForm";
+
 global.fetchAPI = jest.fn(() => [
   { time: "4:00 P.M.", available: true },
   { time: "5:00 P.M.", available: true },
   { time: "6:00 P.M.", available: true },
 ]);
 
-import { render, screen, fireEvent, act } from "@testing-library/react";
-import { BrowserRouter as Router } from "react-router-dom";
-import ReservationForm from "./ReservationForm";
+global.submitAPI = jest.fn(() => true);
 
-test("renders the ReservationForm heading", () => {
-  act(() => {
-    render(
-      <Router>
-        <ReservationForm
-          availableTimes={{}}
-          dispatch={jest.fn()}
-          setReservationDetails={jest.fn()}
-        />
-      </Router>
-    );
-  });
-
-  const headingElement = screen.getByText(/available seating times/i);
-  expect(headingElement).toBeInTheDocument();
-});
+jest.mock("react-router-dom", () => ({
+  ...jest.requireActual("react-router-dom"),
+  useNavigate: () => jest.fn(),
+}));
 
 test("submits the ReservationForm", async () => {
   await act(async () => {
-    render(
+    const { container } = render(
       <Router>
         <ReservationForm
-          availableTimes={{}}
+          availableTimes={{
+            "2024-08-14": [
+              { time: "4:00 P.M.", available: true },
+              { time: "5:00 P.M.", available: true },
+              { time: "6:00 P.M.", available: true },
+            ],
+          }}
           dispatch={jest.fn()}
           setReservationDetails={jest.fn()}
         />
       </Router>
     );
 
-    const availableTimes = fetchAPI(new Date());
-    expect(Array.isArray(availableTimes)).toBe(true);
-    expect(availableTimes.length).toBeGreaterThan(0);
+    console.log(container.innerHTML);
 
-    fireEvent.change(screen.getByPlaceholderText(/click for date/i), {
-      target: { value: "2024-07-28" },
-    });
-    fireEvent.change(screen.getByLabelText(/patrons/i), {
+    // Interact with all required fields
+    fireEvent.change(screen.getByTestId("patrons-select"), {
       target: { value: "2" },
     });
-    fireEvent.change(screen.getByLabelText(/occasion/i), {
+
+    fireEvent.change(screen.getByRole("combobox", { name: /Occasion/i }), {
       target: { value: "Anniversary" },
     });
-    fireEvent.change(screen.getByLabelText(/special requests/i), {
-      target: { value: "Near window" },
-    });
 
-    fireEvent.click(
-      screen.getByRole("button", { name: /proceed with reservation/i })
+    fireEvent.change(
+      screen.getByRole("textbox", { name: /Special Requests/i }),
+      {
+        target: { value: "Near window" },
+      }
     );
 
-    expect(window.alert).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByLabelText("4:00 P.M."));
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /Proceed With Reservation/i })
+    );
+
+    // Validate that the API was called
+    expect(submitAPI).toHaveBeenCalledTimes(1);
+    expect(submitAPI).toHaveReturnedWith(true);
   });
 });

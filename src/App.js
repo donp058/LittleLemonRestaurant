@@ -18,12 +18,36 @@ import ComingSoon from "./components/ComingSoon";
 // Initialize available times with today's date
 export const initializeTimes = () => {
   const today = new Date();
-  const times = fetchAPI(today); // Use fetchAPI directly
-  console.log("Fetched times: ", times); // Debugging line
-  return { [today.toISOString().split("T")[0]]: times };
+  console.log("Calling fetchAPI with date:", today);
+  const times = fetchAPI(today) || [];
+  console.log("Fetched times: ", times);
+  return {
+    [today.toISOString().split("T")[0]]: times.length
+      ? times
+      : [
+          { time: "4:00 P.M.", available: true },
+          { time: "5:00 P.M.", available: true },
+          { time: "6:00 P.M.", available: true },
+        ],
+  };
 };
 
-// Reducer function to update available times based on selected date
+// Update available times based on the selected date
+export const updateTimes = (state, selectedDate) => {
+  const times = fetchAPI(selectedDate) || [];
+  return {
+    ...state,
+    [selectedDate.toISOString().split("T")[0]]: times.length
+      ? times
+      : [
+          { time: "4:00 P.M.", available: true },
+          { time: "5:00 P.M.", available: true },
+          { time: "6:00 P.M.", available: true },
+        ],
+  };
+};
+
+// Reducer function to manage the state of available times
 export const timesReducer = (state = {}, action) => {
   switch (action.type) {
     case "UPDATE_SLOT":
@@ -35,12 +59,8 @@ export const timesReducer = (state = {}, action) => {
         ),
       };
     case "SET_DATE":
-      const selectedDate = new Date(action.payload).toISOString().split("T")[0];
-      const availableTimes = fetchAPI(new Date(selectedDate)); // Use fetchAPI directly
-      return {
-        ...state,
-        [selectedDate]: availableTimes,
-      };
+      const selectedDate = new Date(action.payload);
+      return updateTimes(state, selectedDate);
     default:
       return state;
   }
@@ -88,6 +108,7 @@ function App() {
           />
           <Route path="/confirmed-booking" element={<ConfirmedBooking />} />
           <Route path="/comingsoon" element={<ComingSoon />} />
+          <Route path="/test" element={<SimpleReservationForm />} />
         </Routes>
         <Footer />
       </div>

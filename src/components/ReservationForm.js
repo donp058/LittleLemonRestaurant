@@ -40,11 +40,11 @@ export default function ReservationForm({
   const navigate = useNavigate();
 
   const handleDateChange = (date) => {
-    const formattedDate = date.toISOString().split("T")[0]; // Ensure the format is compatible with fetchAPI
+    const formattedDate = date.toISOString().split("T")[0];
     setSelectedDate(date);
     setIsDateSelected(true);
     dispatch({ type: "SET_DATE", payload: formattedDate });
-    setSelectedTime(""); // Reset selected time when date changes
+    setSelectedTime("");
   };
 
   const handleTimeChange = (e) => {
@@ -68,7 +68,15 @@ export default function ReservationForm({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const formattedDate = selectedDate?.toLocaleDateString(); // Adjust to local date string
+    const formattedDate = selectedDate?.toLocaleDateString();
+
+    // Debugging output to see the validation states
+    console.log("Validation State:", {
+      isDateSelected,
+      isDinersSelected,
+      isOccasionSelected,
+      isTimeSelected,
+    });
 
     let updatedSpecialRequests = specialRequests;
     if (
@@ -89,7 +97,7 @@ export default function ReservationForm({
         updatedSpecialRequests = "None";
       }
       setReservationDetails({
-        date: formattedDate, // Use the formatted date string for reservation
+        date: formattedDate,
         time: selectedTime,
         diners: selectedDiners,
         specialRequests: updatedSpecialRequests,
@@ -102,14 +110,6 @@ export default function ReservationForm({
   const timesToDisplay = selectedDate
     ? availableTimes[selectedDate.toISOString().split("T")[0]] || defaultTimes
     : defaultTimes;
-
-  // Debugging logs
-  console.log("Selected Date:", selectedDate);
-  console.log(
-    "Available Times for Date:",
-    availableTimes[selectedDate?.toISOString().split("T")[0]]
-  );
-  console.log("Times to Display:", timesToDisplay);
 
   return (
     <form
@@ -125,9 +125,10 @@ export default function ReservationForm({
             selected={selectedDate}
             onChange={handleDateChange}
             dateFormat="MM/dd/yyyy"
-            placeholderText="Click For Date"
+            placeholderText="Click for Date"
             id="res-date"
             className={`custom-datepicker ${errors.date ? "error-border" : ""}`}
+            data-testid="datepicker"
             onKeyDown={(e) => e.preventDefault()}
             minDate={new Date()}
             aria-required="true"
@@ -174,7 +175,7 @@ export default function ReservationForm({
         </div>
         <div className="dropdown-section">
           <div className={`dinerFlex ${errors.diners ? "error-border" : ""}`}>
-            <label htmlFor="diners">Patrons</label>
+            <label htmlFor="diner-list">Patrons</label>
             <select
               className="dinerList"
               onChange={handleDinersChange}
@@ -184,7 +185,8 @@ export default function ReservationForm({
               aria-required="true"
               aria-invalid={errors.diners}
               aria-describedby="diners-error"
-              aria-label="Number of Patrons"
+              aria-label="Patrons"
+              data-testid="patrons-select"
             >
               <option value="0">0</option>
               <option value="1">1</option>
@@ -193,7 +195,7 @@ export default function ReservationForm({
             </select>
             {errors.diners && (
               <span id="diners-error" className="error-text">
-                Select.
+                Select
               </span>
             )}
           </div>
@@ -220,13 +222,13 @@ export default function ReservationForm({
             </select>
             {errors.occasion && (
               <span id="occasion-error" className="error-text">
-                Select.
+                Select
               </span>
             )}
           </div>
         </div>
         <div className="special-requests">
-          <label htmlFor="special-requests">Special Requests For Seating</label>
+          <label htmlFor="special-requests">Special Requests</label>
           <textarea
             id="special-requests"
             name="special-requests"
